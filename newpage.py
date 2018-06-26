@@ -21,6 +21,14 @@ from numpy import vstack
 from numpy import hstack
 import re
 
+###########################
+payment_method = []
+pt_amount = []
+country = []
+institute_name = []
+
+countries = []
+
 
 #run from this 
 driver = webdriver.Chrome("E:\WUBS\chromedriver.exe") 
@@ -31,13 +39,7 @@ driver.get(urls)
 
 
 
-###########################
-payment_method = []
-pt_amount = []
-country = []
-institute_name = []
 
-countries = []
 
 elem_9 = driver.find_elements_by_class_name("Heading")
 for e in elem_9:
@@ -49,8 +51,17 @@ elem_1 = driver.find_elements_by_xpath("//li [@class='Autocomplete-option']")
 
 for i in elem_1:
     countries.append(i.text)
+ 
     
-for c in countries:
+    
+for j in range(59,len(countries)) :
+    elem_9 = driver.find_elements_by_class_name("Heading")
+    while(elem_9 == []):
+        driver.back()
+        driver.forward()
+        j = j+1
+        elem_9 = driver.find_elements_by_class_name("Heading")
+    c = countries[j]
     elem_9 = driver.find_elements_by_class_name("Heading")
     for e in elem_9:
         institute = (e.text)
@@ -75,6 +86,7 @@ for c in countries:
     time.sleep(3)
     driver.back()
     time.sleep(5)
+    res = vstack((payment_method,pt_amount, country, institute_name)) 
 
 
 
@@ -82,7 +94,8 @@ for c in countries:
 
 
 ########    
-res = vstack((payment_method,pt_amount, country, institute_name)) 
+
 my_df = pd.DataFrame(res)
 my_df
-my_df.to_csv('out3.csv', index=False, header=False)
+my_df.to_csv('file1.csv', index=False, header=False)
+
