@@ -101,3 +101,21 @@ my_df.to_csv('out.csv', index=False, header=False)
  res = vstack((institute,From_Country,Spread)) 
  my_df = pd.DataFrame(res)
  my_df.to_csv('out.csv', index=False, header=False)
+ 
+ 
+ 
+ 
+ 
+ ##############
+ elem = driver.find_element_by_class_name("Dropdown-button")
+
+elem.click()
+
+elem2 = driver.find_element_by_class_name("choices")
+
+elem3 = driver.find_element_by_class_name("choices__input")
+
+
+elem7 =  driver.find_element_by_link_text("2DayLanguages - Spanish School")
+
+elem3.send_keys(Keys.RETURN)
