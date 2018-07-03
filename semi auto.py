@@ -25,7 +25,9 @@ driver = webdriver.Chrome("E:\WUBS\chromedriver.exe")
 urls = "https://www.flywire.com/pay/sunyjccresidence"
 driver.get(urls)
 #list countries
-countries = [ "India", "China", "Australia","United States","United Kingdom", "Germany"]
+countries_1 = [ "India", "China", "Australia","United States","United Kingdom", "Germany", "Argentina", "Bangladesh", "Chile", "Egypt", "France", "Indonesia", "Iraq", "Japan", "Malaysia", "Mexico", "Nepal", "Nigeria", "Pakistan", "Philippines" ]
+len(countries_1)
+
 #init row_number
 n=-1
 #init variables
@@ -50,7 +52,7 @@ money.send_keys("1000.00")
 driver.get(urls)
 #####iterate from here
 #for num in range(0,6):
-c = countries[5]
+c = countries_1[0]
 
 c
 

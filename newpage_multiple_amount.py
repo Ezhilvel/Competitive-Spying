@@ -1,5 +1,12 @@
 # -*- coding: utf-8 -*-
 """
+Created on Fri Jun 29 14:51:42 2018
+
+@author: admin2
+"""
+
+# -*- coding: utf-8 -*-
+"""
 Created on Mon Jun 25 12:00:04 2018
 
 @author: admin2
@@ -22,20 +29,20 @@ from numpy import hstack
 import re
 
 ###########################
-#run from this 
-driver = webdriver.Chrome("E:\WUBS\chromedriver.exe") 
-
-#list institutes
-urls = "https://www.flywire.com/"
-driver.get(urls)
-
-
 payment_method = []
 pt_amount = []
 country = []
 institute_name = []
 
 countries = []
+
+
+#run from this 
+driver = webdriver.Chrome("E:\WUBS\chromedriver.exe") 
+
+#list institutes
+urls = "https://www.flywire.com/"
+driver.get(urls)
 
 
 
@@ -55,7 +62,7 @@ for i in elem_1:
 
     
     
-for j in range(0,len(countries)) :
+for j in range(0,len(countries)-1) :
     elem_9 = driver.find_elements_by_class_name("Heading")
     while(elem_9 == []):
         driver.back()
@@ -69,7 +76,7 @@ for j in range(0,len(countries)) :
     elem_5 = driver.find_element_by_id("sender_country")
     elem_5.send_keys(c)
     elem_5.send_keys(Keys.ENTER)
-    elem_6  = driver.find_element_by_id("amount")
+    elem_6  = driver.find_element_by_id("international_deposit")
     elem_6.clear()
     elem_6.send_keys("10000.00")
     time.sleep(3)
@@ -87,7 +94,7 @@ for j in range(0,len(countries)) :
     time.sleep(3)
     driver.back()
     time.sleep(3)
-    res__11 = vstack((payment_method,pt_amount, country, institute_name)) 
+    res__9 = vstack((payment_method,pt_amount, country, institute_name)) 
 
 
 
@@ -96,7 +103,7 @@ for j in range(0,len(countries)) :
 
 ########    
 
-my_df__11 = pd.DataFrame(res__11)
-my_df__11
-my_df__11.to_csv('file__11.csv', index=False, header=True)
+my_df__9 = pd.DataFrame(res__9)
+my_df__9
+my_df__9.to_csv('file__9.csv', index=False, header=True)
 
