@@ -44,14 +44,39 @@ elem_1= []
 elem_1 = driver.find_elements_by_xpath("//input [@class='search']")
 elem_1[0].clear()
 elem_1[0].send_keys("Australia")
-#for c in univ_countries:
-#    elem_1.clear()
-#    elem_1.send_keys(c)
-#    elem_1.send_keys(Keys.ENTER)
-#    time.sleep(2)
-    
-elem_1[1]
+time.sleep(1)
+elem_1[1].send_keys(Keys.DOWN)
+elem_1[0].send_keys(Keys.ENTER)
 
+
+elem_1[1].clear()  
+elem_1[1].send_keys("Academies Australasia Polytechnic")
+time.sleep(1)
+elem_1[1].send_keys(Keys.DOWN)
+elem_1[1].send_keys(Keys.ENTER)
+
+time.sleep(1)
+elem_2 = driver.find_element_by_xpath("//button [@class='btn fw btn-custom ng-scope']")
+elem_2.click()
+
+time.sleep(1)
+elem_3 = driver.find_element_by_xpath("//input [@class='search']")
+elem_3.clear()
+elem_3.send_keys("Australia")
+time.sleep(1)
+elem_3.send_keys(Keys.DOWN)
+elem_3.send_keys(Keys.ENTER)
+
+
+elem_4 = driver.find_element_by_xpath("//input [@class='form-control']")
+elem_4.clear()
+elem_4.send_keys(10000)
+time.sleep(1)
+
+elem_5 = driver.find_element_by_xpath("//button [@class='btn fw btn-custom get-quote-btn ng-scope']")
+elem_5.click()
+
+########################
 for e in elem_9:
     institute = (e.text)
         
