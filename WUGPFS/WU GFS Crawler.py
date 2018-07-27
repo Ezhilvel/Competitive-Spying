@@ -150,3 +150,6 @@ elem_from_ccy = driver.find_elements_by_xpath("//span [@class ='ng-scope ng-bidd
 for fccy in elem_from_ccy:
     from_ccy.append(fccy)
 
+#institute_name.append(institute)
+
+#country.append(c)
