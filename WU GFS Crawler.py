@@ -131,8 +131,6 @@ for j in range(0,len(countries)) :
 
 
 
-
-
 ########    
 
 my_df__15 = pd.DataFrame(res__15)
