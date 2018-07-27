@@ -139,3 +139,14 @@ my_df__15 = pd.DataFrame(res__15)
 my_df__15
 my_df__15.to_csv('file__15.csv', index=False, header=True)
 
+#####
+#pt_amount and from_ccy
+
+elem_pt_amount = driver.find_elements_by_xpath("//div [@class ='amt sml ng-bidding']")
+for amt in elem_pt_amount:
+    pt_amount.append(amt)
+    
+elem_from_ccy = driver.find_elements_by_xpath("//span [@class ='ng-scope ng-bidding']")
+for fccy in elem_from_ccy:
+    from_ccy.append(fccy)
+
