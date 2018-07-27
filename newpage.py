@@ -88,6 +88,7 @@ for j in range(0,len(countries)) :
     driver.back()
     time.sleep(3)
     res__11 = vstack((payment_method,pt_amount, country, institute_name)) 
+    
 
 
 
