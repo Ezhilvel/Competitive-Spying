@@ -87,8 +87,7 @@ for j in range(0,len(countries)) :
     time.sleep(3)
     driver.back()
     time.sleep(3)
-    res__11 = vstack((payment_method,pt_amount, country, institute_name)) 
-    
+    res__21 = vstack((payment_method,pt_amount, country, institute_name)) 
 
 
 
@@ -97,7 +96,7 @@ for j in range(0,len(countries)) :
 
 ########    
 
-my_df__11 = pd.DataFrame(res__11)
-my_df__11
-my_df__11.to_csv('file__11.csv', index=False, header=True)
+my_df__21 = pd.DataFrame(res__21)
+my_df__21
+my_df__21.to_csv('file__21.csv', index=False, header=True)
 
