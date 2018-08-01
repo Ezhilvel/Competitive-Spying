@@ -38,118 +38,67 @@ institute_name = []
 countries = []
 
 univ_countries = ['Australia','Canada','France','Japan','New Zealand','United Kingdom','United States']
+us_univ = ['American Language Academy',	'Barnard College',	'Calvin Christian School',	'Indiana University',	'Purdue University',	'UC Irvine',	'University Of Connecticut',	'University of Washington']
 
+sender_countries = ['Afghanistan',	'Albania',	'Algeria',	'Angola',	'Argentina',	'Australia',	'Austria',	'Azerbaijan',	'Bahamas',	'Bahrain',	'Bangladesh',	'Barbados',	'Belarus',	'Belgium',	'Bhutan',	'Bolivia',	'Bosnia and Herzegovina',	'Botswana',	'Brazil',	'Brunei Darussalam',	'Bulgaria',	'Burundi',	'Cambodia',	'Cameroon',	'Canada',	'Central African Republic',	'Chad',	'Chile',	'China',	'Colombia',	'Congo',	'Costa Rica',		'Croatia',	'Cyprus',	'Czech Republic',	'Denmark',	'Dominican Republic',	'Ecuador',	'Egypt',	'El Salvador',	'Estonia',	'Ethiopia',	'Fiji',	'Finland',	'France',	'Gabon',	'Gambia',	'Georgia',	'Germany',	'Ghana',	'Gibraltar',	'Greece',	'Grenada',	'Guatemala',	'Guinea',	'Guyana',	'Haiti',	'Honduras',	'Hong Kong',	'Hungary',	'Iceland',	'India',	'Indonesia',	'Iraq',	'Ireland',	'Israel',	'Italy',	'Jamaica',	'Japan',	'Jordan',	'Kazakhstan',	'Kenya',	'Korea, Republic of',	'Kuwait',	'Kyrgyzstan',	'Latvia',	'Lebanon',	'Lithuania',	'Madagascar',	'Malaysia',	'Maldives',	'Malta',	'Mauritius',	'Mexico',	'Moldova, Republic of',	'Monaco',	'Mongolia',	'Montenegro',	'Morocco',	'Mozambique',	'Myanmar',	'Namibia',	'Nepal',	'Netherlands',	'New Zealand',	'Nicaragua',	'Niger',	'Nigeria',	'Norway',	'Oman',	'Pakistan',	'Panama',	'Papua New Guinea',	'Paraguay',	'Peru',	'Philippines',	'Poland',	'Portugal',	'Puerto Rico',	'Qatar',	'Reunion',	'Romania',	'Russian Federation',	'Rwanda',	'Saint Vincent and the Grenadines',	'Saudi Arabia',	'Senegal',	'Serbia',	'Seychelles',	'Singapore',	'Slovakia',	'Slovenia',	'Somalia',	'South Africa',	'Spain',	'Sri Lanka',	'Suriname',	'Sweden',	'Switzerland',	'Syrian Arab Republic',	'Taiwan',	'Tajikistan',	'Tanzania, United Republic of',	'Thailand',	'Trinidad and Tobago',	'Tunisia',	'Turkey',	'Turkmenistan',	'Uganda',	'Ukraine',	'United Arab Emirates',	'United Kingdom',	'United States',	'Uruguay',	'Uzbekistan',	'Venezuela',	'Vietnam',	'Western Sahara',	'Yemen',	'Zambia',	'Zimbabwe']
+                    
+                    
 elem_1= []
 #country_loop
 elem_1 = driver.find_elements_by_xpath("//input [@class='search']")
 elem_1[0].clear()
-elem_1[0].send_keys("Australia")
+elem_1[0].send_keys("United States")
 time.sleep(1)
-elem_1[1].send_keys(Keys.DOWN)
 elem_1[0].send_keys(Keys.ENTER)
 
-
 elem_1[1].clear()  
-elem_1[1].send_keys("Academies Australasia Polytechnic")
-time.sleep(1)
-elem_1[1].send_keys(Keys.DOWN)
+elem_1[1].send_keys(us_univ[0])
+time.sleep(2)
 elem_1[1].send_keys(Keys.ENTER)
 
 time.sleep(1)
 elem_2 = driver.find_element_by_xpath("//button [@class='btn fw btn-custom ng-scope']")
 elem_2.click()
 
-time.sleep(1)
-elem_3 = driver.find_element_by_xpath("//input [@class='search']")
-elem_3.clear()
-elem_3.send_keys("Australia")
-time.sleep(1)
-elem_3.send_keys(Keys.DOWN)
-elem_3.send_keys(Keys.ENTER)
-
-
-elem_4 = driver.find_element_by_xpath("//input [@class='form-control']")
-elem_4.clear()
-elem_4.send_keys(10000)
-time.sleep(1)
-
-elem_5 = driver.find_element_by_xpath("//button [@class='btn fw btn-custom get-quote-btn ng-scope']")
-elem_5.click()
-
-########################
-for e in elem_9:
-    institute = (e.text)
+for j in range(106,len(sender_countries)):
+    time.sleep(1)
+    elem_3 = driver.find_element_by_xpath("//input [@class='search']")
+    elem_3.clear()
+    elem_3.send_keys(sender_countries[j])
+    time.sleep(1)
+    elem_3.send_keys(Keys.ENTER)
+    
+    
+    elem_4 = driver.find_element_by_xpath("//input [@class='form-control']")
+    elem_4.clear()
+    elem_4.send_keys(10000)
+    time.sleep(1)
+    
+    elem_5 = driver.find_element_by_xpath("//button [@class='btn fw btn-custom get-quote-btn ng-scope']")
+    elem_5.click()
+       
+    ########################    
+    time.sleep(15)
+    elem_pt_amount = driver.find_elements_by_class_name("amt")
+    for amt in range(0,len(elem_pt_amount)):
+        if amt%2 == 0:
+            pt_amount.append(elem_pt_amount[amt].text)
+            institute_name.append("Missouri Western State University")
         
-elem_2 = driver.find_element_by_id("sender_country")
-elem_2.send_keys(Keys.ENTER)
-elem_1 = driver.find_elements_by_xpath("//li [@class='Autocomplete-option']")
-
-
-elem_1 = driver.find_element_by_xpath("//input [@class='search']")
-
-elem_1.send_keys("Australia")
-for i in elem_1:
-    countries.append(i.text)
- 
-
-    
-    
-for j in range(0,len(countries)) :
-    elem_9 = driver.find_elements_by_class_name("Heading")
-    while(elem_9 == []):
-        driver.back()
-        driver.forward()
-        j = j+1
-        elem_9 = driver.find_elements_by_class_name("Heading")
-    c = countries[j]
-    elem_9 = driver.find_elements_by_class_name("Heading")
-    for e in elem_9:
-        institute = (e.text)
-    elem_5 = driver.find_element_by_id("sender_country")
-    elem_5.send_keys(c)
-    elem_5.send_keys(Keys.ENTER)
-    elem_6  = driver.find_element_by_id("amount")
-    elem_6.clear()
-    elem_6.send_keys("10000.00")
-    time.sleep(3)
-    elem_7 = driver.find_element_by_class_name("Navigation-slider")
-    elem_7.click()
-    time.sleep(5)
-    elem_7 = driver.find_elements_by_class_name("Offer-name")
-    elem_8 = driver.find_elements_by_class_name("Offer-price")
-    for e in elem_7:
-        payment_method.append(e.text)
-        country.append(c)  
-    for e in elem_8:
-        pt_amount.append(e.text) 
-        institute_name.append(institute)
-    time.sleep(3)
+    elem_pay_mode = driver.find_elements_by_xpath("//div [@class ='box-logo']")
+    for mode in elem_pay_mode:
+        payment_method.append(mode.text)
+        country.append(sender_countries[j])
+    ########################
     driver.back()
     time.sleep(3)
-    res__15 = vstack((payment_method,pt_amount, country, institute_name)) 
-
-
-
-
+    kes__5 = vstack((payment_method,pt_amount, country, institute_name)) 
+########################
 
 
 ########    
 
-my_df__15 = pd.DataFrame(res__15)
-my_df__15
-my_df__15.to_csv('file__15.csv', index=False, header=True)
+my_df_wu__5 = pd.DataFrame(kes__5)
+my_df_wu__5
+my_df_wu__5.to_csv('wu_file__5.csv', index=False, header=True)
 
-#####
-#pt_amount and from_ccy
-
-elem_pt_amount = driver.find_elements_by_xpath("//div [@class ='amt sml ng-bidding']")
-for amt in elem_pt_amount:
-    pt_amount.append(amt)
-    
-elem_from_ccy = driver.find_elements_by_xpath("//span [@class ='ng-scope ng-bidding']")
-for fccy in elem_from_ccy:
-    from_ccy.append(fccy)
-
-#institute_name.append(institute)
-
-#country.append(c)
