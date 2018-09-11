@@ -65,7 +65,7 @@ countries = ['Afghanistan',	'Albania',	'Algeria',	'Angola',	'Argentina',	'Austra
                     
     
     
-for j in range(5,len(countries)) :
+for j in range(148,len(countries)) :
     driver.switch_to.window(driver.window_handles[0])
     elem_9 = driver.find_elements_by_class_name("Heading")
     while(elem_9 == []):
@@ -104,6 +104,8 @@ for j in range(5,len(countries)) :
     
     for a,b in zip(elem_7, elem_8):
         c1 = "NAC"
+        if a.text == "":
+            c1 = "DC"
         if a.text[0:8] == "Domestic" and c == "India":
             c1 = "INR"
         if c1 == "NAC" and b.text[-1:] == "€":
@@ -114,6 +116,8 @@ for j in range(5,len(countries)) :
             c1 = "BRL"
         if c1 == "NAC" and b.text[-1:] == "l$":
             c1 = "LRD"
+        if c1 == "NAC" and b.text[-1:] == "A$":
+            c1 = "AUD"
         if c1 == "NAC" and b.text[:1] == "$" and ('Canadian' in a.text or c == "Canada"):
             c1 = "CAD"
         if c1 == "NAC" and b.text[:1] == "$" :
@@ -156,4 +160,4 @@ for j in range(5,len(countries)) :
 
 my_df__21 = pd.DataFrame(res__21)
 my_df__21
-my_df__21.to_csv('file_indiana 1000 full.csv', index=False, header=True)
+my_df__21.to_csv('file_MIT 1000 full.csv', index=False, header=True)
