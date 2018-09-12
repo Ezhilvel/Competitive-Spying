@@ -66,7 +66,7 @@ countries = ['Afghanistan',	'Albania',	'Algeria',	'Angola',	'Argentina',	'Austra
                     
     
     
-for j in range(0,len(countries)) :
+for j in range(76,len(countries)) :
     CCY_corrdidor = []
     fx_rate_corridor = []
     driver.switch_to.window(driver.window_handles[0])
@@ -131,7 +131,7 @@ for j in range(0,len(countries)) :
             c1 = a.text[-3:]
         if c1 == "NAC" and a.text[-3:] not in Currency_List: 
             c2 = a.text[-3:]
-            xyz = c_ccy.loc[c_ccy['c'] == c, 'CCY'].item()
+            xyz = c_ccy.loc[c_ccy['c'] == c, 'CCY'].item() 
             c1 = xyz
         From_CCY = c1
         CCY_corrdidor.append(From_CCY)
@@ -177,12 +177,23 @@ for j in range(0,len(countries)) :
     res__21 = vstack((payment_method,pt_amount, country, institute_name, CCY_Full, fx_rate)) 
 
 
-
-
-
-
 ########    
 
 my_df__21 = pd.DataFrame(res__21)
 my_df__21
 my_df__21.to_csv('file_MIT 5000 full xe.csv', index=False, header=True)
+
+
+
+
+
+#### In case of interuption
+#pop_n = len(payment_method) - len(CCY_Full)
+countries.index(country[-1])
+
+pop_n = country.count(country[-1])
+for i in range(0,(n-1)) :
+    payment_method.pop()
+    pt_amount.pop()
+    country.pop()
+    institute_name.pop()
