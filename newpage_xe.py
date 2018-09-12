@@ -53,10 +53,11 @@ country = []
 institute_name = []
 CCY_Full = []
 fx_rate = []
+EUR_Count= 0
 
 To_CCY = "USD"
-amount = 1000
-amount_int = "1000"
+amount = 5000
+amount_int = "5000"
 
 Currency_List = ['FJD',	'MXN',	'STD',	'EUR',	'SCR',	'TVD',	'CDF',	'BBD',	'HNL',	'UGX',	'ZAR',	'STN',	'CUC',	'BSD',	'SDG',	'SDG',	'IQD',	'CUP',	'GMD',	'TWD',	'RSD',	'MYR',	'FKP',	'XOF',	'UYU',	'CVE',	'OMR',	'KES',	'SEK',	'BTN',	'GNF',	'MZN',	'MZN',	'SVC',	'ARS',	'QAR',	'IRR',	'EUR',	'XPD',	'THB',	'UZS',	'XPF',	'BDT',	'LYD',	'KWD',	'XPT',	'RUB',	'ISK',	'EUR',	'MKD',	'DZD',	'PAB',	'SGD',	'JEP',	'KGS',	'XAF',	'XAG',	'EUR',	'CHF',	'HRK',	'EUR',	'DJF',	'TZS',	'VND',	'XAU',	'AUD',	'KHR',	'IDR',	'KYD',	'BWP',	'SHP',	'EUR',	'TJS',	'RWF',	'DKK',	'BGN',	'MMK',	'NOK',	'SYP',	'XBT',	'LKR',	'CZK',	'EUR',	'EUR',	'XCD',	'HTG',	'BHD',	'EUR',	'EUR',	'KZT',	'SZL',	'YER',	'AFN',	'AWG',	'NPR',	'MNT',	'GBP',	'BYN',	'HUF',	'BYN',	'BIF',	'XDR',	'BZD',	'MOP',	'NAD',	'EUR',	'TMT',	'PEN',	'WST',	'TMT',	'EUR',	'EUR',	'GTQ',	'CLP',	'EUR',	'TND',	'SLL',	'DOP',	'KMF',	'GEL',	'MAD',	'AZN',	'TOP',	'AZN',	'PGK',	'CNH',	'UAH',	'ERN',	'MRO',	'CNY',	'MRU',	'BMD',	'PHP',	'PYG',	'JMD',	'EUR',	'COP',	'USD',	'GGP',	'ETB',	'VEF',	'SOS',	'VEF',	'VUV',	'LAK',	'BND',	'ZMW',	'LRD',	'ALL',	'GHS',	'EUR',	'ZMW',	'SPL',	'TRY',	'ILS',	'GHS',	'GYD',	'KPW',	'BOB',	'MDL',	'AMD',	'TRY',	'LBP',	'JOD',	'HKD',	'EUR',	'LSL',	'CAD',	'EUR',	'MUR',	'IMP',	'RON',	'GIP',	'RON',	'NGN',	'CRC',	'PKR',	'ANG',	'SRD',	'EUR',	'SAR',	'TTD',	'MVR',	'SRD',	'INR',	'KRW',	'JPY',	'AOA',	'PLN',	'SBD',	'EUR',	'MWK',	'MGA',	'EUR',	'EUR',	'MGA',	'BAM',	'EGP',	'NIO',	'NZD',	'BRL']
 
@@ -65,7 +66,9 @@ countries = ['Afghanistan',	'Albania',	'Algeria',	'Angola',	'Argentina',	'Austra
                     
     
     
-for j in range(148,len(countries)) :
+for j in range(0,len(countries)) :
+    CCY_corrdidor = []
+    fx_rate_corridor = []
     driver.switch_to.window(driver.window_handles[0])
     elem_9 = driver.find_elements_by_class_name("Heading")
     while(elem_9 == []):
@@ -131,21 +134,43 @@ for j in range(148,len(countries)) :
             xyz = c_ccy.loc[c_ccy['c'] == c, 'CCY'].item()
             c1 = xyz
         From_CCY = c1
-        CCY_Full.append(From_CCY)
-        if From_CCY == 'USD':
-            fx_rate.append(amount_int)
-        else:
+        CCY_corrdidor.append(From_CCY)
+        ccy_set = list(set(CCY_corrdidor))
+    fx_rate_set = []
+    for cs in ccy_set:
+        driver.switch_to.window(driver.window_handles[1])
+        if cs == 'USD':
+            fx_rate_set.append(amount_int)
+        if cs == 'EUR' and EUR_Count%5 == 0:
             time.sleep(3)
-            driver.switch_to.window(driver.window_handles[1])
-            xe = "https://www.xe.com/currencyconverter/convert/?Amount=" +  amount_int +"&From=" + To_CCY + "&To=" + From_CCY
+            xe = "https://www.xe.com/currencyconverter/convert/?Amount=" +  amount_int +"&From=" + To_CCY + "&To=" + cs
             driver.get(xe)
             time.sleep(3)
             elem_9 = driver.find_element_by_class_name("converterresult-toAmount")
             time.sleep(3)
-            fx_rate.append(elem_9.text)
+            fx_rate_set.append(elem_9.text)
+            last_EUR = elem_9.text            
             time.sleep(3)
-            driver.switch_to.window(driver.window_handles[0])
-        time.sleep(3)
+            EUR_Count = EUR_Count + 1
+        if cs == 'EUR' and EUR_Count%5 != 0:
+            fx_rate_set.append(last_EUR)
+        if cs != 'USD' and cs != 'EUR':
+            time.sleep(3)
+            xe = "https://www.xe.com/currencyconverter/convert/?Amount=" +  amount_int +"&From=" + To_CCY + "&To=" + cs
+            driver.get(xe)
+            time.sleep(3)
+            elem_9 = driver.find_element_by_class_name("converterresult-toAmount")
+            time.sleep(3)
+            fx_rate_set.append(elem_9.text)
+            time.sleep(3)
+    for cc in CCY_corrdidor:
+        ccy_index = ccy_set.index(cc)
+        fx_rate_corridor.append(fx_rate_set[ccy_index])
+        CCY_Full.append(cc)
+        fx_rate.append(fx_rate_set[ccy_index])
+    
+    time.sleep(3)
+    driver.switch_to.window(driver.window_handles[0])
     time.sleep(3)
     driver.back()
     time.sleep(3)
@@ -160,4 +185,4 @@ for j in range(148,len(countries)) :
 
 my_df__21 = pd.DataFrame(res__21)
 my_df__21
-my_df__21.to_csv('file_MIT 1000 full.csv', index=False, header=True)
+my_df__21.to_csv('file_MIT 5000 full xe.csv', index=False, header=True)
