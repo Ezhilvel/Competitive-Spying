@@ -111,6 +111,8 @@ for j in range(76,len(countries)) :
             c1 = "DC"
         if a.text[0:8] == "Domestic" and c == "India":
             c1 = "INR"
+        if c1 == "NAC" and a.text[-1:] == ")" and a.text[-4:-1] in Currency_List:
+            c1 = a.text[-4:-1]
         if c1 == "NAC" and a.text[-3:] in Currency_List: 
             c1 = a.text[-3:]
         if c1 == "NAC" and b.text[-1:] == "€":
@@ -127,10 +129,6 @@ for j in range(76,len(countries)) :
             c1 = "CAD"
         if c1 == "NAC" and b.text[:1] == "$" :
             c1 = "USD"
-        if c1 == "NAC" and a.text[-1:] == ")" and a.text[-4:-1] in Currency_List:
-            c1 = a.text[-4:-1]
-        if c1 == "NAC" and a.text[-3:] in Currency_List: 
-            c1 = a.text[-3:]
         if c1 == "NAC" and a.text[-3:] not in Currency_List: 
             c2 = a.text[-3:]
             xyz = c_ccy.loc[c_ccy['c'] == c, 'CCY'].item() 
