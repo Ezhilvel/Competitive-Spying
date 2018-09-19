@@ -54,11 +54,12 @@ institute_name = []
 CCY_Full = []
 fx_rate = []
 To_Currency = []
+pt_amount_final = []
 EUR_Count= 0
 
 To_CCY = "USD"
 amount = 10000
-amount_int = "10000"
+amount_int = "10000.00"
 
 Currency_List = ['FJD',	'MXN',	'STD',	'EUR',	'SCR',	'TVD',	'CDF',	'BBD',	'HNL',	'UGX',	'ZAR',	'STN',	'CUC',	'BSD',	'SDG',	'SDG',	'IQD',	'CUP',	'GMD',	'TWD',	'RSD',	'MYR',	'FKP',	'XOF',	'UYU',	'CVE',	'OMR',	'KES',	'SEK',	'BTN',	'GNF',	'MZN',	'MZN',	'SVC',	'ARS',	'QAR',	'IRR',	'EUR',	'XPD',	'THB',	'UZS',	'XPF',	'BDT',	'LYD',	'KWD',	'XPT',	'RUB',	'ISK',	'EUR',	'MKD',	'DZD',	'PAB',	'SGD',	'JEP',	'KGS',	'XAF',	'XAG',	'EUR',	'CHF',	'HRK',	'EUR',	'DJF',	'TZS',	'VND',	'XAU',	'AUD',	'KHR',	'IDR',	'KYD',	'BWP',	'SHP',	'EUR',	'TJS',	'RWF',	'DKK',	'BGN',	'MMK',	'NOK',	'SYP',	'XBT',	'LKR',	'CZK',	'EUR',	'EUR',	'XCD',	'HTG',	'BHD',	'EUR',	'EUR',	'KZT',	'SZL',	'YER',	'AFN',	'AWG',	'NPR',	'MNT',	'GBP',	'BYN',	'HUF',	'BYN',	'BIF',	'XDR',	'BZD',	'MOP',	'NAD',	'EUR',	'TMT',	'PEN',	'WST',	'TMT',	'EUR',	'EUR',	'GTQ',	'CLP',	'EUR',	'TND',	'SLL',	'DOP',	'KMF',	'GEL',	'MAD',	'AZN',	'TOP',	'AZN',	'PGK',	'CNH',	'UAH',	'ERN',	'MRO',	'CNY',	'MRU',	'BMD',	'PHP',	'PYG',	'JMD',	'EUR',	'COP',	'USD',	'GGP',	'ETB',	'VEF',	'SOS',	'VEF',	'VUV',	'LAK',	'BND',	'ZMW',	'LRD',	'ALL',	'GHS',	'EUR',	'ZMW',	'SPL',	'TRY',	'ILS',	'GHS',	'GYD',	'KPW',	'BOB',	'MDL',	'AMD',	'TRY',	'LBP',	'JOD',	'HKD',	'EUR',	'LSL',	'CAD',	'EUR',	'MUR',	'IMP',	'RON',	'GIP',	'RON',	'NGN',	'CRC',	'PKR',	'ANG',	'SRD',	'EUR',	'SAR',	'TTD',	'MVR',	'SRD',	'INR',	'KRW',	'JPY',	'AOA',	'PLN',	'SBD',	'EUR',	'MWK',	'MGA',	'EUR',	'EUR',	'MGA',	'BAM',	'EGP',	'NIO',	'NZD',	'BRL']
 
@@ -67,7 +68,7 @@ countries = ['Afghanistan',	'Albania',	'Algeria',	'Angola',	'Argentina',	'Austra
                     
     
     
-for j in range(140,len(countries)) :
+for j in range(0,len(countries)) :
     CCY_corrdidor = []
     fx_rate_corridor = []
     driver.switch_to.window(driver.window_handles[0])
@@ -90,6 +91,12 @@ for j in range(140,len(countries)) :
     time.sleep(3)
     elem_7 = driver.find_element_by_class_name("Navigation-slider")
     elem_7.click()
+    time.sleep(3)
+    ahref = driver.find_elements_by_tag_name("a")
+    for a in ahref:
+        guest = a.text
+        if guest == 'continue as a guest':
+            a.click()
     time.sleep(5)
     try:
         elem_9 = driver.find_element_by_class_name("PaymentOptions-showMore")
@@ -100,7 +107,7 @@ for j in range(140,len(countries)) :
         time.sleep(3)
         driver.execute_script("window.scrollTo(0, document.body.scrollHeight);")
     except:
-        a=5
+        aa=5
     time.sleep(3)
     elem_7 = driver.find_elements_by_class_name("Offer-name")
     #while(elem_7[-1].text == ''):
@@ -116,7 +123,15 @@ for j in range(140,len(countries)) :
         country.append(c)  
     for e in elem_8:
         pt_amount.append(e.text) 
-        institute_name.append("NYU")
+        pt_amount_1 = int(''.join(ele for ele in e.text if ele.isdigit()))
+        if e.text[:1] == '¥':
+            pt_amount_2 = pt_amount_1
+        elif e.text[0:4] == 'ر.ع.' or e.text[0:3] == 'ب.د' or e.text[-2:] == 'dt':
+            pt_amount_2 = pt_amount_1/1000
+        else:
+            pt_amount_2 = pt_amount_1/100
+        institute_name.append("Syracuse")
+        pt_amount_final.append(pt_amount_2)
         To_Currency.append(To_CCY)
     
     for a,b in zip(elem_7, elem_8):
@@ -137,9 +152,9 @@ for j in range(140,len(countries)) :
             c1 = "GBP"
         if c1 == "NAC" and b.text[:2] == "R$":
             c1 = "BRL"
-        if c1 == "NAC" and b.text[-1:] == "l$":
+        if c1 == "NAC" and b.text[:2] == "l$":
             c1 = "LRD"
-        if c1 == "NAC" and b.text[-1:] == "A$":
+        if c1 == "NAC" and b.text[:2] == "A$":
             c1 = "AUD"
         if c1 == "NAC" and b.text[:1] == "$" and ('Canadian' in a.text or c == "Canada"):
             c1 = "CAD"
@@ -187,18 +202,52 @@ for j in range(140,len(countries)) :
     
     time.sleep(3)
     driver.switch_to.window(driver.window_handles[0])
-    time.sleep(3)
     driver.back()
+    time.sleep(1)
+    try:
+        best_price  = driver.find_element_by_class_name("BestPriceGuaranteed")
+        driver.back()
+    except:
+        aa=5
     time.sleep(3)
-    res__21 = vstack((payment_method,pt_amount, country, institute_name, To_Currency, CCY_Full, fx_rate)) 
+
+#loop over 
+
+#calculating spread and fee    
+
+fee = []
+spread = []
 
 
-########    
+for deal, settlemnt, amt, fx in zip(To_Currency,CCY_Full,pt_amount_final, fx_rate):
+    fx_int = int(''.join(ele for ele in fx if ele.isdigit()))
+    if deal == settlemnt:
+        spread.append(0)
+        fee.append((amt - fx_int))
+    if deal != settlemnt:
+        fx_int = fx_int/100
+        spread.append((amt - fx_int)/fx_int)
+        fee.append(0)   
 
-my_df__21 = pd.DataFrame(res__21)
-my_df__21
-my_df__21.to_csv('file_NYU 10000 full xe 2.csv', index=False, header=True)
+#res__21 = vstack((payment_method,pt_amount, country, institute_name, To_Currency, CCY_Full, pt_amount_final, fx_rate, spread, fee)) 
+#my_df__21 = pd.DataFrame(res__22)
+#my_df__21
+#res__22.to_csv('file_Syracuse 10000 full xe.csv', index=False, header=True)
 
+
+payment_method_pd = pd.DataFrame(payment_method)
+pt_amount_pd = pd.DataFrame(pt_amount)
+country_pd = pd.DataFrame(country)
+institute_name_pd = pd.DataFrame(institute_name)
+To_Currency_pd = pd.DataFrame(To_Currency)
+CCY_Full_pd = pd.DataFrame(CCY_Full)
+pt_amount_final_pd = pd.DataFrame(pt_amount_final)
+fx_rate_pd = pd.DataFrame(fx_rate)
+spread_pd = pd.DataFrame(spread)
+fee_pd = pd.DataFrame(fee)
+
+test3 = pd.concat([payment_method_pd,pt_amount_pd, country_pd, institute_name_pd, To_Currency_pd, CCY_Full_pd, pt_amount_final_pd, fx_rate_pd, spread_pd, fee_pd], axis=1)
+test3.to_csv('file_Syracuse 10000 full xe.csv', index=False, header=True)
 
 
 
