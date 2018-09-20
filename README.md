@@ -1,7 +1,6 @@
 # Competitive-Spying
 This crawler scrapes the quotes from the Payment website and cleans the variables to find the exact amount and currency. 
 Using this the real-time exchange rate is scraped from XE and the spread is calculated.
-
 Refer: (https://github.com/Ezhilvel/Competitive-Spying/blob/master/newpage_xe.py)
   
   
@@ -11,6 +10,5 @@ Refer: (https://github.com/Ezhilvel/Competitive-Spying/blob/master/newpage_xe.py
  
  
 XE API can also be used to extract the exchange rates in bulk. 
-
 Refer: (https://github.com/Ezhilvel/Competitive-Spying/blob/master/XE%20API/xe%20api%20request.docx)
 
