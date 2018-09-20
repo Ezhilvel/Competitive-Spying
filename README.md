@@ -7,6 +7,7 @@ Refer: (https://github.com/Ezhilvel/Competitive-Spying/blob/master/newpage_xe.py
   Languages used: R, Python
   Packages Used: Pandas, Numpy, Selenium Webdriver
    <Scrapy and Beautiful Soup are good web scraping packages available for python, but selenium lets you perform actions> 
+   Refer: (https://selenium-python.readthedocs.io/getting-started.html)
  
  
 XE API can also be used to extract the exchange rates in bulk. 
