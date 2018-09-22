@@ -56,8 +56,9 @@ fx_rate = []
 To_Currency = []
 pt_amount_final = []
 EUR_Count= 0
+USD_Count= 0
 
-To_CCY = "USD"
+To_CCY = "CAD"
 amount = 10000
 amount_int = "10000"
 
@@ -130,11 +131,13 @@ for j in range(0,len(countries)) :
             if e.text[:1] == '¥' or f.text[-3:] == 'CLP':
                 pt_amount_2 = pt_amount_1
             #elif e.text[0:4] == 'ر.ع.' or e.text[0:3] == 'ب.د' or e.text[-2:] == 'dt' or f.text[-3:] == 'KWD':
-            elif e.text[-4:] == '.000':    
+            elif e.text[-4:] == '.000' or e.text[-2:] == 'dt':    
                 pt_amount_2 = pt_amount_1/1000
+            elif f.text[-3:] == 'MGA':
+                pt_amount_2 = pt_amount_1/10
             else:
                 pt_amount_2 = pt_amount_1/100
-        institute_name.append("xxx")
+        institute_name.append("yyy")
         pt_amount_final.append(pt_amount_2)
         To_Currency.append(To_CCY)
     
@@ -142,29 +145,29 @@ for j in range(0,len(countries)) :
         c1 = "NAC"
         if a.text == "":
             c1 = "DC"
-        if a.text[0:8] == "Domestic" and c == "India":
+        elif a.text[0:8] == "Domestic" and c == "India":
             c1 = "INR"
-        if c1 == "NAC" and a.text[-1:] == ")" and a.text[-4:-1] in Currency_List:
+        elif c1 == "NAC" and a.text[-1:] == ")" and a.text[-4:-1] in Currency_List:
             c1 = a.text[-4:-1]
-        if c1 == "NAC" and a.text[-3:] in Currency_List: 
+        elif c1 == "NAC" and a.text[-3:] in Currency_List: 
             c1 = a.text[-3:]
-        if c1 == "NAC" and b.text[-1:] == "€":
+        elif c1 == "NAC" and b.text[-1:] == "€":
             c1 = "EUR"
-        if c1 == "NAC" and b.text[:1] == "£":
+        elif c1 == "NAC" and b.text[:1] == "£":
             c1 = "GBP"
-        if c1 == "NAC" and b.text[-1:] == "£":
+        elif c1 == "NAC" and b.text[-1:] == "£":
             c1 = "GBP"
-        if c1 == "NAC" and b.text[:2] == "R$":
+        elif c1 == "NAC" and b.text[:2] == "R$":
             c1 = "BRL"
-        if c1 == "NAC" and b.text[:2] == "l$":
+        elif c1 == "NAC" and b.text[:2] == "l$":
             c1 = "LRD"
-        if c1 == "NAC" and b.text[:2] == "A$":
+        elif c1 == "NAC" and b.text[:2] == "A$":
             c1 = "AUD"
-        if c1 == "NAC" and b.text[:1] == "$" and ('Canadian' in a.text or c == "Canada"):
+        elif c1 == "NAC" and b.text[:1] == "$" and ('Canadian' in a.text or c == "Canada"):
             c1 = "CAD"
-        if c1 == "NAC" and b.text[:1] == "$" :
+        elif c1 == "NAC" and b.text[:1] == "$" :
             c1 = "USD"
-        if c1 == "NAC" and a.text[-3:] not in Currency_List: 
+        elif c1 == "NAC" and a.text[-3:] not in Currency_List: 
             c2 = a.text[-3:]
             xyz = c_ccy.loc[c_ccy['c'] == c, 'CCY'].item() 
             c1 = xyz
@@ -174,9 +177,9 @@ for j in range(0,len(countries)) :
     fx_rate_set = []
     for cs in ccy_set:
         driver.switch_to.window(driver.window_handles[1])
-        if cs == 'USD':
+        if cs == To_CCY:
             fx_rate_set.append(amount_int)
-        if cs == 'EUR' and EUR_Count%5 == 0:
+        elif cs == 'EUR' and EUR_Count%5 == 0:
             time.sleep(3)
             xe = "https://www.xe.com/currencyconverter/convert/?Amount=" +  amount_int +"&From=" + To_CCY + "&To=" + cs
             driver.get(xe)
@@ -187,9 +190,22 @@ for j in range(0,len(countries)) :
             last_EUR = elem_9.text            
             time.sleep(3)
             EUR_Count = EUR_Count + 1
-        if cs == 'EUR' and EUR_Count%5 != 0:
+        elif cs == 'EUR' and EUR_Count%5 != 0:
             fx_rate_set.append(last_EUR)
-        if cs != 'USD' and cs != 'EUR':
+        elif cs == 'USD' and USD_Count%5 == 0:
+            time.sleep(3)
+            xe = "https://www.xe.com/currencyconverter/convert/?Amount=" +  amount_int +"&From=" + To_CCY + "&To=" + cs
+            driver.get(xe)
+            time.sleep(3)
+            elem_9 = driver.find_element_by_class_name("converterresult-toAmount")
+            time.sleep(3)
+            fx_rate_set.append(elem_9.text)
+            last_USD = elem_9.text            
+            time.sleep(3)
+            USD_Count = USD_Count + 1
+        elif cs == 'USD' and USD_Count%5 != 0:
+            fx_rate_set.append(last_USD)
+        elif cs != To_CCY and cs != 'USD' and cs != 'EUR':
             time.sleep(3)
             xe = "https://www.xe.com/currencyconverter/convert/?Amount=" +  amount_int +"&From=" + To_CCY + "&To=" + cs
             driver.get(xe)
@@ -236,7 +252,7 @@ for deal, settlemnt, amt, fx in zip(To_Currency,CCY_Full,pt_amount_final, fx_rat
 res__21 = vstack((payment_method,pt_amount, country, institute_name, To_Currency, CCY_Full, pt_amount_final, fx_rate, spread, fee)) 
 my_df__21 = pd.DataFrame(res__21)
 my_df__22 = my_df__21.T
-my_df__22.to_csv('file_xxx 10000 full xe.csv', index=False, header=True)
+my_df__22.to_csv('file ggg 10000 full xe.csv', index=False, header=True)
 
 
 #payment_method_pd = pd.DataFrame(payment_method)
