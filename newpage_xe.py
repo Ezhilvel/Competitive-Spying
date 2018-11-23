@@ -1,17 +1,4 @@
-# -*- coding: utf-8 -*-
-"""
-Created on Mon Sep 10 11:00:25 2018
-
-@author: admin2
-"""
-
-"""
-Created on Mon Jun 25 12:00:04 2018
-@author: admin2
-"""
-
-
-#importing libs
+#importing libraries
 import selenium
 import time
 from selenium.webdriver import ActionChains
@@ -22,31 +9,28 @@ from selenium import webdriver
 from pprint import pprint
 import numpy as np
 import pandas as pd
-import numpy
 from numpy import vstack
 from numpy import hstack
 import re
 import csv
 
+#Importing country and currency pair file
 c_ccy = pd.read_csv("E:\WUBS\c_ccy.csv", sep=',')
 
-###########################
-#run from this 
+#initiate chrome web driver
 driver = webdriver.Chrome("E:\WUBS\chromedriver.exe") 
 
-#list institutes
+#target url 
 urls = "https://www.flywire.com/"
 driver.get(urls)
 
-##-----------------------------------------------------------------------------------------------------------------------------------
+#open a new tab for accessing XE.com
 driver.switch_to.window(driver.window_handles[0])
 action = ActionChains(driver)
 link = driver.find_element_by_tag_name('a')
 action.key_down(Keys.CONTROL).click(link).key_up(Keys.CONTROL).perform()
 
-sleep(2)
-##-----------------------------------------------------------------------------------------------------------------------------------
-
+#empty arrays for storing the scraped values
 payment_method = []
 pt_amount = []
 country = []
@@ -58,22 +42,27 @@ pt_amount_final = []
 EUR_Count= 0
 USD_Count= 0
 
+#target university and home currency
 To_CCY = "CAD"
 amount = 10000
 amount_int = "10000"
 
+#list of avilable currencies
 Currency_List = ['FJD',	'MXN',	'STD',	'EUR',	'SCR',	'TVD',	'CDF',	'BBD',	'HNL',	'UGX',	'ZAR',	'STN',	'CUC',	'BSD',	'SDG',	'SDG',	'IQD',	'CUP',	'GMD',	'TWD',	'RSD',	'MYR',	'FKP',	'XOF',	'UYU',	'CVE',	'OMR',	'KES',	'SEK',	'BTN',	'GNF',	'MZN',	'MZN',	'SVC',	'ARS',	'QAR',	'IRR',	'EUR',	'XPD',	'THB',	'UZS',	'XPF',	'BDT',	'LYD',	'KWD',	'XPT',	'RUB',	'ISK',	'EUR',	'MKD',	'DZD',	'PAB',	'SGD',	'JEP',	'KGS',	'XAF',	'XAG',	'EUR',	'CHF',	'HRK',	'EUR',	'DJF',	'TZS',	'VND',	'XAU',	'AUD',	'KHR',	'IDR',	'KYD',	'BWP',	'SHP',	'EUR',	'TJS',	'RWF',	'DKK',	'BGN',	'MMK',	'NOK',	'SYP',	'XBT',	'LKR',	'CZK',	'EUR',	'EUR',	'XCD',	'HTG',	'BHD',	'EUR',	'EUR',	'KZT',	'SZL',	'YER',	'AFN',	'AWG',	'NPR',	'MNT',	'GBP',	'BYN',	'HUF',	'BYN',	'BIF',	'XDR',	'BZD',	'MOP',	'NAD',	'EUR',	'TMT',	'PEN',	'WST',	'TMT',	'EUR',	'EUR',	'GTQ',	'CLP',	'EUR',	'TND',	'SLL',	'DOP',	'KMF',	'GEL',	'MAD',	'AZN',	'TOP',	'AZN',	'PGK',	'CNH',	'UAH',	'ERN',	'MRO',	'CNY',	'MRU',	'BMD',	'PHP',	'PYG',	'JMD',	'EUR',	'COP',	'USD',	'GGP',	'ETB',	'VEF',	'SOS',	'VEF',	'VUV',	'LAK',	'BND',	'ZMW',	'LRD',	'ALL',	'GHS',	'EUR',	'ZMW',	'SPL',	'TRY',	'ILS',	'GHS',	'GYD',	'KPW',	'BOB',	'MDL',	'AMD',	'TRY',	'LBP',	'JOD',	'HKD',	'EUR',	'LSL',	'CAD',	'EUR',	'MUR',	'IMP',	'RON',	'GIP',	'RON',	'NGN',	'CRC',	'PKR',	'ANG',	'SRD',	'EUR',	'SAR',	'TTD',	'MVR',	'SRD',	'INR',	'KRW',	'JPY',	'AOA',	'PLN',	'SBD',	'EUR',	'MWK',	'MGA',	'EUR',	'EUR',	'MGA',	'BAM',	'EGP',	'NIO',	'NZD',	'BRL']
 
- 
+#List of target corridors
 countries = ['Afghanistan',	'Albania',	'Algeria',	'Angola',	'Argentina',	'Australia',	'Austria',	'Azerbaijan',	'Bahamas',	'Bahrain',	'Bangladesh',	'Barbados',	'Belarus',	'Belgium',	'Bhutan',	'Bolivia',	'Bosnia and Herzegovina',	'Botswana',	'Brazil',	'Brunei Darussalam',	'Bulgaria',	'Burundi',	'Cambodia',	'Cameroon',	'Canada',	'Central African Republic',	'Chad',	'Chile',	'China',	'Colombia',	'Congo',	'Costa Rica',		'Croatia',	'Cyprus',	'Czech Republic',	'Denmark',	'Dominican Republic',	'Ecuador',	'Egypt',	'El Salvador',	'Estonia',	'Ethiopia',	'Fiji',	'Finland',	'France',	'Gabon',	'Gambia',	'Georgia',	'Germany',	'Ghana',	'Gibraltar',	'Greece',	'Grenada',	'Guatemala',	'Guinea',	'Guyana',	'Haiti',	'Honduras',	'Hong Kong',	'Hungary',	'Iceland',	'India',	'Indonesia',	'Iraq',	'Ireland',	'Israel',	'Italy',	'Jamaica',	'Japan',	'Jordan',	'Kazakhstan',	'Kenya',	'Korea, Republic of',	'Kuwait',	'Kyrgyzstan',	'Latvia',	'Lebanon',	'Lithuania',	'Madagascar',	'Malaysia',	'Maldives',	'Malta',	'Mauritius',	'Mexico',	'Moldova, Republic of',	'Monaco',	'Mongolia',	'Montenegro',	'Morocco',	'Mozambique',	'Myanmar',	'Namibia',	'Nepal',	'Netherlands',	'New Zealand',	'Nicaragua',	'Niger',	'Nigeria',	'Norway',	'Oman',	'Pakistan',	'Panama',	'Papua New Guinea',	'Paraguay',	'Peru',	'Philippines',	'Poland',	'Portugal',	'Puerto Rico',	'Qatar',	'Reunion',	'Romania',	'Russian Federation',	'Rwanda',	'Saint Vincent and the Grenadines',	'Saudi Arabia',	'Senegal',	'Serbia',	'Seychelles',	'Singapore',	'Slovakia',	'Slovenia',	'Somalia',	'South Africa',	'Spain',	'Sri Lanka',	'Suriname',	'Sweden',	'Switzerland',	'Syrian Arab Republic',	'Taiwan',	'Tajikistan',	'Tanzania, United Republic of',	'Thailand',	'Trinidad and Tobago',	'Tunisia',	'Turkey',	'Turkmenistan',	'Uganda',	'Ukraine',	'United Arab Emirates',	'United Kingdom',	'United States',	'Uruguay',	'Uzbekistan',	'Venezuela',	'Vietnam',	'Western Sahara',	'Yemen',	'Zambia',	'Zimbabwe']
                     
     
-    
+#scraping     
 for j in range(0,len(countries)) :
+    #capturing the currency and fx rate within the loop
     CCY_corrdidor = []
     fx_rate_corridor = []
+    #switching back to the target site
     driver.switch_to.window(driver.window_handles[0])
     elem_9 = driver.find_elements_by_class_name("Heading")
+    #in case of error go back to the home page and continuing the process from the last corridor
     while(elem_9 == []):
         driver.back()
         driver.forward()
@@ -83,22 +72,27 @@ for j in range(0,len(countries)) :
     elem_9 = driver.find_elements_by_class_name("Heading")
     for e in elem_9:
         institute = (e.text)
+    #elem5 is the target corridor selection drop box
     elem_5 = driver.find_element_by_id("sender_country")
     elem_5.send_keys(c)
     elem_5.send_keys(Keys.ENTER)
+    #elem6 is amount to be transferred text box
     elem_6  = driver.find_element_by_id("amount")
     elem_6.clear()
     elem_6.send_keys(amount_int)
     time.sleep(3)
+    #Clicking the NEXT button
     elem_7 = driver.find_element_by_class_name("Navigation-slider")
     elem_7.click()
     time.sleep(3)
+    #To handle the login/sign up pop
     ahref = driver.find_elements_by_tag_name("a")
     for a in ahref:
         guest = a.text
         if guest == 'continue as a guest':
             a.click()
     time.sleep(5)
+    #making sure the entire page is loaded
     try:
         elem_9 = driver.find_element_by_class_name("PaymentOptions-showMore")
         time.sleep(1)
@@ -110,9 +104,11 @@ for j in range(0,len(countries)) :
     except:
         aa=5
     time.sleep(3)
+    #elem_7 is the list of payment mode options offered
     elem_7 = driver.find_elements_by_class_name("Offer-name")
     #while(elem_7[-1].text == ''):
         #elem_7 = driver.find_elements_by_class_name("Offer-name")  
+     #elem_8 is the corresponding offered price 
     elem_8 = driver.find_elements_by_class_name("Offer-price")
     #while(elem_8[-1].text == ''):
         #elem_8 = driver.find_elements_by_class_name("Offer-name")
@@ -157,12 +153,6 @@ for j in range(0,len(countries)) :
             c1 = "GBP"
         elif c1 == "NAC" and b.text[-1:] == "£":
             c1 = "GBP"
-        elif c1 == "NAC" and b.text[:2] == "R$":
-            c1 = "BRL"
-        elif c1 == "NAC" and b.text[:2] == "l$":
-            c1 = "LRD"
-        elif c1 == "NAC" and b.text[:2] == "A$":
-            c1 = "AUD"
         elif c1 == "NAC" and b.text[:1] == "$" and ('Canadian' in a.text or c == "Canada"):
             c1 = "CAD"
         elif c1 == "NAC" and b.text[:1] == "$" :
